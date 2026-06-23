@@ -1,5 +1,4 @@
 // --- Part 1: Priority Queue ---
-// Helps Dijkstra always pick the closest next room
 class PriorityQueue {
     constructor() { this.values = []; }
     enqueue(node, priority) {
@@ -44,15 +43,40 @@ function findShortestPath(startNode, endNode) {
     return { path: path.concat(startNode).reverse(), distance: distances[endNode] };
 }
 
-// Helper to format distance nicely
-function formatDistance(meters) {
-    if (meters >= 1000) {
-        return (meters / 1000).toFixed(1) + " km";
+// --- Part 3: Step-by-Step Translator ---
+// This turns ['RoomA', 'RoomB'] into "Step 1: Walk 15m to Room B"
+function generateDetailedInstructions(path) {
+    let html = "<ol style='padding-left: 20px; line-height: 1.8;'>";
+    
+    for (let i = 0; i < path.length - 1; i++) {
+        let current = path[i];
+        let next = path[i+1];
+        let dist = hospitalGraph[current][next];
+        
+        let cleanCurrent = current.replace(/_/g, ' ');
+        let cleanNext = next.replace(/_/g, ' ');
+
+        // Check if we are moving between floors in an elevator
+        if (current.startsWith("E") && next.startsWith("E") && current.substring(0,2) === next.substring(0,2)) {
+            let floor = next.split("_")[1].replace("L", "Level ");
+            if (floor === "-1") floor = "Basement Parking";
+            html += `<li>Take <b>${cleanCurrent.split(" ")[0]}</b> to <b>${floor}</b></li>`;
+        } else {
+            // Standard walking instruction
+            html += `<li>From ${cleanCurrent}, walk <b>${dist}m</b> to <b>${cleanNext}</b></li>`;
+        }
     }
+    
+    html += "</ol>";
+    return html;
+}
+
+function formatDistance(meters) {
+    if (meters >= 1000) return (meters / 1000).toFixed(1) + " km";
     return meters + " meters";
 }
 
-// --- Part 3: UI Logic (The Website Interaction) ---
+// --- Part 4: UI Logic ---
 document.addEventListener("DOMContentLoaded", () => {
     const startSelect = document.getElementById("startNode");
     const endSelect = document.getElementById("endNode");
@@ -62,10 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const pathResult = document.getElementById("path-result");
     const distanceResult = document.getElementById("distance-result");
 
-    // Populate dropdowns from your Graph data
     const rooms = Object.keys(hospitalGraph).sort();
-    
-    // Add professional placeholder
     startSelect.add(new Option("📍 Select your current location...", ""));
     
     rooms.forEach(room => {
@@ -74,40 +95,29 @@ document.addEventListener("DOMContentLoaded", () => {
         endSelect.add(new Option(name, room));
     });
 
-    // BUTTON 1: Standard Directions
     findBtn.addEventListener("click", () => {
         const start = startSelect.value;
         const end = endSelect.value;
-
-        if (!start || !end) {
-            alert("Please select both a start and destination!");
-            return;
-        }
+        if (!start || !end) return alert("Please select both locations!");
 
         const result = findShortestPath(start, end);
         outputCard.classList.remove("hidden");
-        pathResult.innerHTML = `<b>Best Route:</b><br>` + result.path.join(" ➔ ").replace(/_/g, ' ');
-        distanceResult.innerText = "Total Distance: " + formatDistance(result.distance);
+        
+        // Show the Step-by-Step list
+        pathResult.innerHTML = `<b>Navigation Steps:</b><br>` + generateDetailedInstructions(result.path);
+        distanceResult.innerHTML = `<hr><b>Total Trip:</b> ${formatDistance(result.distance)}`;
     });
 
-    // BUTTON 2: Smart Emergency Logic
-    const allHospitals = [
-        "Main_Entrance", "North_Hospital", "NE_Hospital", "East_Hospital", "SE_Hospital", 
-        "South_Hospital", "SW_Hospital", "West_Hospital", "NW_Hospital"
-    ];
+    const allHospitals = ["Main_Entrance", "North_Hospital", "NE_Hospital", "East_Hospital", "SE_Hospital", "South_Hospital", "SW_Hospital", "West_Hospital", "NW_Hospital"];
 
     emergencyBtn.addEventListener("click", () => {
         const start = startSelect.value;
-        if (!start) {
-            alert("Please select your current location first!");
-            return;
-        }
+        if (!start) return alert("Select your location first!");
 
         let minDistance = Infinity;
         let closestHospital = "";
         let finalPath = [];
 
-        // Scan all hospitals to find the closest one to the user
         allHospitals.forEach(hosp => {
             if (start === hosp) return;
             const result = findShortestPath(start, hosp);
@@ -121,11 +131,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (closestHospital) {
             outputCard.classList.remove("hidden");
             pathResult.innerHTML = 
-                `<span style="color: #e74c3c; font-weight: bold;">🚨 EMERGENCY DETECTED!</span><br>` +
-                `Nearest Hospital: <b>${closestHospital.replace(/_/g, ' ')}</b><br><br>` +
-                `<b>Route:</b> ` + finalPath.join(" ➔ ").replace(/_/g, ' ');
+                `<span style="color: #e74c3c; font-weight: bold;">🚨 EMERGENCY: HEADING TO ${closestHospital.replace(/_/g, ' ')}</span><br><br>` +
+                `<b>Driving/Walking Steps:</b><br>` + generateDetailedInstructions(finalPath);
             
-            distanceResult.innerText = "Total Distance: " + formatDistance(minDistance);
+            distanceResult.innerHTML = `<hr><b>Total Distance to Help:</b> ${formatDistance(minDistance)}`;
         }
     });
 });
