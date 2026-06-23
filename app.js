@@ -1,4 +1,4 @@
-// --- Part 1: Priority Queue ---
+ // --- Part 1: Priority Queue ---
 class PriorityQueue {
     constructor() { this.values = []; }
     enqueue(node, priority) { this.values.push({ node, priority }); this.values.sort((a, b) => a.priority - b.priority); }
@@ -6,7 +6,7 @@ class PriorityQueue {
     isEmpty() { return this.values.length === 0; }
 }
 
-// --- Part 2: Dijkstra's Algorithm ---
+// --- Part 2: Dijkstra Engine ---
 function findShortestPath(startNode, endNode) {
     const distances = {}; const prev = {}; const pq = new PriorityQueue(); let path = [];
     for (let node in hospitalGraph) {
@@ -25,7 +25,7 @@ function findShortestPath(startNode, endNode) {
     return { path: path.concat(startNode).reverse(), distance: distances[endNode] };
 }
 
-// --- Part 3: AMHARIC DICTIONARY (Every Single Room Included) ---
+// --- Part 3: FULL AMHARIC DICTIONARY (Nothing Missing) ---
 const translations = {
     "am": {
         "title": "🏥 የሆስፒታል አቅጣጫ አመልካች",
@@ -36,107 +36,72 @@ const translations = {
         "route_title": "ምርጥ አቅጣጫ:",
         "placeholder": "📍 ያሉበትን ቦታ ይምረጡ...",
         "total": "ጠቅላላ ርቀት:",
-        "meters": "ሜትር",
-        "km": "ኪሎ ሜትር",
-        // Directions
         "North": "ወደ ሰሜን", "South": "ወደ ደቡብ", "East": "ወደ ምስራቅ", "West": "ወደ ምዕራብ",
         "North East": "ወደ ሰሜን ምስራቅ", "North West": "ወደ ሰሜን ምዕራብ",
         "South East": "ወደ ደቡብ ምስራቅ", "South West": "ወደ ደቡብ ምዕራብ",
-        "Up": "ወደ ላይ", "Down": "ወደ ታች",
-        // Room Mappings (Matched to graph.js)
-        "Main Entrance": "ዋና መግቢያ",
-        "Main Reception Desk": "ዋና መቀበያ ጠረጴዛ",
-        "North Hospital": "ሰሜን ሆስፒታል",
-        "South Hospital": "ደቡብ ሆስፒታል",
-        "East Hospital": "ምስራቅ ሆስፒታል",
-        "West Hospital": "ምዕራብ ሆስፒታል",
-        "North East Hospital": "ሰሜን ምስራቅ ሆስፒታል",
-        "South East Hospital": "ደቡብ ምስራቅ ሆስፒታል",
-        "South West Hospital": "ደቡብ ምዕራብ ሆስፒታል",
-        "North West Hospital": "ሰሜን ምዕራብ ሆስፒታል",
-        "Downtown Area": "መሀል ከተማ",
-        "Uptown District": "አፕታውን ዲስትሪክት",
-        "Industrial Park": "የኢንዱስትሪ ፓርክ",
-        "Residential Area": "የመኖሪያ አካባቢ",
-        "Parking Central Hub": "ማዕከላዊ የመኪና ማቆሚያ",
-        "Ambulance Bay": "የአምቡላንስ ማቆሚያ",
-        "Generator Room": "የጄኔሬተር ክፍል",
-        "Maintenance Workshop": "የጥገና አውደ ጥናት",
-        "Parking South Zone": "ደቡብ የመኪና ማቆሚያ ዞን",
-        "Parking East Zone": "ምስራቅ የመኪና ማቆሚያ ዞን",
-        "Parking West Zone": "ምዕራብ የመኪና ማቆሚያ ዞን",
-        "Car Entrance South East": "ደቡብ ምስራቅ የመኪና መግቢያ",
-        "Car Entrance South West": "ደቡብ ምዕራብ የመኪና መግቢያ",
-        "Emergency Room Triage": "የአደጋ ጊዜ ታካሚዎች መለያ ክፍል",
-        "Emergency Entrance": "የአደጋ ጊዜ መግቢያ",
-        "Pharmacy": "መድኃኒት ቤት",
-        "Cafeteria": "ካፌቴሪያ",
-        "Gift Shop": "የጥቅማጥቅም መሸጫ ሱቅ",
-        "Laboratory Waiting Area": "የላብራቶሪ መጠበቂያ ቦታ",
-        "Radiology Department": "የራጅ/ራዲዮሎጂ ክፍል",
-        "Pathology Laboratory": "የፓቶሎጂ ላብራቶሪ",
-        "Blood Bank": "የደም ባንክ",
-        "Dialysis Center": "የዲያሊሲስ ማዕከል",
-        "Doctors Lobby": "የሐኪሞች መቀበያ",
-        "Cardiology Wing": "የልብ ሕክምና ክፍል",
-        "Neurology Wing": "የነርቭ ሕክምና ክፍል",
-        "Sterile Hallway": "ንፁህ ኮሪደር",
-        "Operating Theater 1": "የቀዶ ጥገና ክፍል 1",
-        "Operating Theater 2": "የቀዶ ጥገና ክፍል 2",
-        "Recovery Ward": "የማገገሚያ ክፍል",
-        "Central Nursing Station": "ማዕከላዊ የነርሶች ጣቢያ",
-        "Pediatric Ward": "የሕፃናት ሕክምና ክፍል",
-        "Maternity Ward": "የወሊድ ክፍል",
-        "Security Hub": "የጥበቃ ማዕከል",
-        "Intensive Care Unit": "ፅኑ ሕሙማን መከታተያ (ICU)",
-        "Private VIP Suite": "ልዩ የቪአይፒ ክፍል",
-        "Administration Boardroom": "የአስተዳደር የመሰብሰቢያ አዳራሽ",
         // Floors
-        "Underground": "ከርሰ ምድር",
-        "Ground Floor": "ምድር ቤት",
-        "1st Floor": "1ኛ ፎቅ",
-        "2nd Floor": "2ኛ ፎቅ",
-        "3rd Floor": "3ኛ ፎቅ",
-        "4th Floor": "4ኛ ፎቅ",
-        "5th Floor": "5ኛ ፎቅ"
+        "Underground": "ከርሰ ምድር", "Ground Floor": "ምድር ቤት", "1st Floor": "1ኛ ፎቅ", 
+        "2nd Floor": "2ኛ ፎቅ", "3rd Floor": "3ኛ ፎቅ", "4th Floor": "4ኛ ፎቅ", "5th Floor": "5ኛ ፎቅ",
+        // Regional
+        "Main Entrance": "ዋና መግቢያ", "North Hospital": "ሰሜን ሆስፒታል", "South Hospital": "ደቡብ ሆስፒታል",
+        "East Hospital": "ምስራቅ ሆስፒታል", "West Hospital": "ምዕራብ ሆስፒታል", "North East Hospital": "ሰሜን ምስራቅ ሆስፒታል",
+        "South East Hospital": "ደቡብ ምስራቅ ሆስፒታል", "South West Hospital": "ደቡብ ምዕራብ ሆስፒታል",
+        "North West Hospital": "ሰሜን ምዕራብ ሆስፒታል", "Downtown Area": "መሀል ከተማ",
+        "Uptown District": "አፕታውን ዲስትሪክት", "Industrial Park": "የኢንዱስትሪ ፓርክ", "Residential Area": "የመኖሪያ አካባቢ",
+        // Internal
+        "Main Reception Desk": "ዋና መቀበያ ጠረጴዛ", "Emergency Room Triage": "የአደጋ ጊዜ ታካሚዎች መለያ ክፍል",
+        "Emergency Entrance": "የአደጋ ጊዜ መግቢያ", "Pharmacy": "መድኃኒት ቤት", "Cafeteria": "ካፌቴሪያ", "Gift Shop": "የጥቅማጥቅም መሸጫ ሱቅ",
+        "Laboratory Waiting Area": "የላብራቶሪ መጠበቂያ ቦታ", "Radiology Department": "የራጅ/ራዲዮሎጂ ክፍል",
+        "Pathology Laboratory": "የፓቶሎጂ ላብራቶሪ", "Blood Bank": "የደም ባንክ", "Dialysis Center": "የዲያሊሲስ ማዕከል",
+        "Doctors Lobby": "የሐኪሞች መቀበያ", "Cardiology Wing": "የልብ ሕክምና ክፍል", "Neurology Wing": "የነርቭ ሕክምና ክፍል",
+        "Sterile Hallway": "ንፁህ ኮሪደር", "Operating Theater 1": "የቀዶ ጥገና ክፍል 1", "Operating Theater 2": "የቀዶ ጥገና ክፍል 2",
+        "Recovery Ward": "የማገገሚያ ክፍል", "Central Nursing Station": "ማዕከላዊ የነርሶች ጣቢያ",
+        "Pediatric Ward": "የሕፃናት ሕክምና ክፍል", "Maternity Ward": "የወሊድ ክፍል", "Security Hub": "የጥበቃ ማዕከል",
+        "Intensive Care Unit": "ፅኑ ሕሙማን መከታተያ (ICU)", "Private VIP Suite": "ልዩ የቪአይፒ ክፍል",
+        "Parking Central Hub": "ማዕከላዊ የመኪና ማቆሚያ", "Ambulance Bay": "የአምቡላንስ ማቆሚያ",
+        "Parking East Zone": "ምስራቅ የመኪና ማቆሚያ ዞን", "Parking South Zone": "ደቡብ የመኪና ማቆሚያ ዞን",
+        "Parking West Zone": "ምዕራብ የመኪና ማቆሚያ ዞን", "Car Entrance South East": "ደቡብ ምስራቅ የመኪና መግቢያ",
+        "Car Entrance South West": "ደቡብ ምዕራብ የመኪና መግቢያ", "Administration Boardroom": "የአስተዳደር የመሰብሰቢያ አዳራሽ",
+        "Maintenance Workshop": "የጥገና አውደ ጥናት", "Generator Room": "የጄኔሬተር ክፍል"
     }
 };
 
 let currentLang = "en";
 
-function translate(text) {
-    let clean = text.replace(/_/g, ' ');
-    // Handle Elevator specific translation
-    if (currentLang === "am" && clean.includes("Elevator")) {
-        let parts = clean.split(" ");
-        let floor = parts.slice(2).join(" ");
-        let translatedFloor = translations.am[floor] || floor;
-        return `ሊፍት ${parts[1]} (${translatedFloor})`;
+function translate(name) {
+    let clean = name.replace(/_/g, ' ').trim();
+    if (currentLang === "am") {
+        // Automatically handle any elevator name: "Elevator X Floor Y"
+        if (clean.includes("Elevator")) {
+            let parts = clean.split(" ");
+            let num = parts[1];
+            let floorKey = parts.slice(2).join(" ");
+            let transFloor = translations.am[floorKey] || floorKey;
+            return `ሊፍት ${num} (${transFloor})`;
+        }
+        if (translations.am[clean]) return translations.am[clean];
     }
-    if (currentLang === "am" && translations.am[clean]) return translations.am[clean];
     return clean;
 }
 
-// --- Part 4: Navigation Logic (With Elevator Collapse & Directions) ---
 function generateDetailedInstructions(path) {
     let html = "<ol style='padding-left: 20px; line-height: 1.8;'>";
     let i = 0;
     while (i < path.length - 1) {
         let current = path[i], next = path[i+1];
-        let curSplit = current.split("_"), nxtSplit = next.split("_");
-        
-        // Smart Elevator Logic
-        if (curSplit[0] === "Elevator" && nxtSplit[0] === "Elevator" && curSplit[1] === nxtSplit[1]) {
+        let curClean = current.replace(/_/g, ' '), nxtClean = next.replace(/_/g, ' ');
+
+        // Smart Elevator Collapse Logic
+        if (curClean.startsWith("Elevator") && nxtClean.startsWith("Elevator") && curClean.split(" ")[1] === nxtClean.split(" ")[1]) {
+            let elevName = curClean.split(" ")[0] + " " + curClean.split(" ")[1];
             let j = i;
-            while (j < path.length - 1 && path[j+1].startsWith(curSplit[0] + "_" + curSplit[1])) { j++; }
+            while (j < path.length - 1 && path[j+1].replace(/_/g, ' ').startsWith(elevName)) { j++; }
             let finalFloor = translate(path[j].split("_").slice(2).join(" "));
             html += (currentLang === "am") 
-                ? `<li>በ<b>${translate(curSplit[0] + "_" + curSplit[1])}</b> በቀጥታ ወደ <b>${finalFloor}</b> ይሂዱ</li>`
-                : `<li>Take <b>${curSplit[0]} ${curSplit[1]}</b> directly to the <b>${path[j].split("_").slice(2).join(" ")}</b></li>`;
+                ? `<li>በ<b>${translate(elevName)}</b> በቀጥታ ወደ <b>${finalFloor}</b> ይሂዱ</li>`
+                : `<li>Take <b>${elevName}</b> directly to the <b>${path[j].split("_").slice(2).join(" ")}</b></li>`;
             i = j;
-        } 
-        // Walking Logic with Compass
-        else {
+        } else {
             let edge = hospitalGraph[current][next];
             html += (currentLang === "am")
                 ? `<li>ከ<b>${translate(current)}</b> ተነስተው ${edge.dist}ሜ <b>${translate(edge.dir)}</b> ወደ <b>${translate(next)}</b> ይራመዱ</li>`
@@ -152,7 +117,6 @@ function formatDistance(m) {
     return m + (currentLang === "am" ? " ሜትር" : " meters");
 }
 
-// --- Part 5: UI Management ---
 document.addEventListener("DOMContentLoaded", () => {
     const startSelect = document.getElementById("startNode"), endSelect = document.getElementById("endNode");
     const langSelect = document.getElementById("languageSelect"), findBtn = document.getElementById("findBtn");
@@ -177,6 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     langSelect.addEventListener("change", (e) => { currentLang = e.target.value; updateUI(); outputCard.classList.add("hidden"); });
+    
     findBtn.addEventListener("click", () => {
         if (!startSelect.value || !endSelect.value) return;
         const res = findShortestPath(startSelect.value, endSelect.value);
@@ -199,5 +164,6 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("distance-result").innerText = (currentLang === "am" ? "ጠቅላላ ርቀት: " : "Total Distance: ") + formatDistance(min);
         }
     });
+
     updateUI();
 });
