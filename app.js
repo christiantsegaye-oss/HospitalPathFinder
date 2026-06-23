@@ -7,11 +7,7 @@ class PriorityQueue {
 
 function findShortestPath(startNode, endNode) {
     const distances = {}; const prev = {}; const pq = new PriorityQueue(); let path = [];
-    for (let node in hospitalGraph) {
-        distances[node] = (node === startNode) ? 0 : Infinity;
-        prev[node] = null;
-        if (node === startNode) pq.enqueue(node, 0);
-    }
+    for (let node in hospitalGraph) { distances[node] = (node === startNode) ? 0 : Infinity; prev[node] = null; if (node === startNode) pq.enqueue(node, 0); }
     while (!pq.isEmpty()) {
         let smallest = pq.dequeue().node;
         if (smallest === endNode) { while (prev[smallest]) { path.push(smallest); smallest = prev[smallest]; } break; }
@@ -23,6 +19,7 @@ function findShortestPath(startNode, endNode) {
     return { path: path.concat(startNode).reverse(), distance: distances[endNode] };
 }
 
+// --- GLOBAL DICTIONARY ---
 const translations = {
     "am": {
         "title": "🏥 የሆስፒታል አቅጣጫ አመልካች", "current_loc": "📍 አሁን ያሉበት ቦታ:", "destination": "መድረሻ:",
@@ -30,9 +27,11 @@ const translations = {
         "route_title": "ምርጥ አቅጣጫ:", "placeholder": "📍 ያሉበትን ቦታ ይምረጡ...",
         "North": "ወደ ሰሜን", "South": "ወደ ደቡብ", "East": "ወደ ምስራቅ", "West": "ወደ ምዕራብ",
         "North East": "ወደ ሰሜን ምስራቅ", "North West": "ወደ ሰሜን ምዕራብ", "South East": "ወደ ደቡብ ምስራቅ", "South West": "ወደ ደቡብ ምዕራብ",
-        "Up": "ወደ ላይ", "Down": "ወደ ታች", "total": "ጠቅላላ ርቀት:",
-        // FULL NODE DICTIONARY
-        "Main Entrance": "ዋና መግቢያ", "Main Reception Desk": "ዋና መቀበያ ጠረጴዛ", "Emergency Room Triage": "የአደጋ ጊዜ ታካሚዎች መለያ ክፍል", "Emergency Entrance": "የአደጋ ጊዜ መግቢያ", "Pharmacy": "መድኃኒት ቤት", "Cafeteria": "ካፌቴሪያ", "Gift_Shop": "የጥቅማጥቅም መሸጫ ሱቅ",
+        "total": "ጠቅላላ ርቀት:", "meters": "ሜትር", "km": "ኪ.ሜ",
+        // Floors
+        "Underground": "ከርሰ ምድር", "Ground Floor": "ምድር ቤት", "1st Floor": "1ኛ ፎቅ", "2nd Floor": "2ኛ ፎቅ", "3rd Floor": "3ኛ ፎቅ", "4th Floor": "4ኛ ፎቅ", "5th Floor": "5ኛ ፎቅ",
+        // ALL DEPARTMENTS
+        "Main Entrance": "ዋና መግቢያ", "Main Reception Desk": "ዋና መቀበያ ጠረጴዛ", "Emergency Room Triage": "የአደጋ ጊዜ ታካሚዎች መለያ ክፍል", "Emergency Entrance": "የአደጋ ጊዜ መግቢያ", "Pharmacy": "መድኃኒት ቤት", "Cafeteria": "ካፌቴሪያ", "Gift Shop": "የጥቅማጥቅም መሸጫ ሱቅ",
         "Laboratory Waiting Area": "የላብራቶሪ መጠበቂያ ቦታ", "Radiology Department": "የራጅ ክፍል", "Pathology Laboratory": "የፓቶሎጂ ላብራቶሪ", "Blood Bank": "የደም ባንክ", "Dialysis Center": "የዲያሊሲስ ማዕከል",
         "Doctors Lobby": "የሐኪሞች መቀበያ", "Cardiology Wing": "የልብ ሕክምና ክፍል", "Neurology Wing": "የነርቭ ሕክምና ክፍል", "Oncology Department": "የካንሰር ሕክምና ክፍል", "Orthopedics Clinic": "የአጥንት ሕክምና ክሊኒክ",
         "Sterile Hallway": "ንፁህ ኮሪደር", "Operating Theater 1": "የቀዶ ጥገና ክፍል 1", "Operating Theater 2": "የቀዶ ጥገና ክፍል 2", "Recovery Ward": "የማገገሚያ ክፍል", "Pre Surgery Preparation Room": "ከቀዶ ጥገና በፊት ዝግጅት ክፍል",
@@ -41,8 +40,7 @@ const translations = {
         "Parking Central Hub": "ማዕከላዊ የመኪና ማቆሚያ", "Ambulance Bay": "የአምቡላንስ ማቆሚያ", "Parking East Zone": "ምስራቅ የመኪና ማቆሚያ ዞን", "Parking South Zone": "ደቡብ የመኪና ማቆሚያ ዞን", "Parking West Zone": "ምዕራብ የመኪና ማቆሚያ ዞን",
         "Car Entrance South East": "ደቡብ ምስራቅ የመኪና መግቢያ", "Car Entrance South West": "ደቡብ ምዕራብ የመኪና መግቢያ", "Maintenance Workshop": "የጥገና አውደ ጥናት", "Generator Room": "የጄኔሬተር ክፍል",
         "Downtown Area": "መሀል ከተማ", "Uptown District": "አፕታውን ዲስትሪክት", "Industrial Park": "የኢንዱስትሪ ፓርክ", "Residential Area": "የመኖሪያ አካባቢ",
-        "North Hospital": "ሰሜን ሆስፒታል", "South Hospital": "ደቡብ ሆስፒታል", "East Hospital": "ምስራቅ ሆስፒታል", "West Hospital": "ምዕራብ ሆስፒታል", "North East Hospital": "ሰሜን ምስራቅ ሆስፒታል", "South East Hospital": "ደቡብ ምስራቅ ሆስፒታል", "South West Hospital": "ደቡብ ምዕራብ ሆስፒታል", "North West Hospital": "ሰሜን ምዕራብ ሆስፒታል",
-        "Underground": "ከርሰ ምድር", "Ground Floor": "ምድር ቤት", "1st Floor": "1ኛ ፎቅ", "2nd Floor": "2ኛ ፎቅ", "3rd Floor": "3ኛ ፎቅ", "4th Floor": "4ኛ ፎቅ", "5th Floor": "5ኛ ፎቅ"
+        "North Hospital": "ሰሜን ሆስፒታል", "South Hospital": "ደቡብ ሆስፒታል", "East Hospital": "ምስራቅ ሆስፒታል", "West Hospital": "ምዕራብ ሆስፒታል", "North East Hospital": "ሰሜን ምስራቅ ሆስፒታል", "South East Hospital": "ደቡብ ምስራቅ ሆስፒታል", "South West Hospital": "ደቡብ ምዕራብ ሆስፒታል", "North West Hospital": "ሰሜን ምዕራብ ሆስፒታል"
     }
 };
 
@@ -68,7 +66,6 @@ function generateDetailedInstructions(path) {
     while (i < path.length - 1) {
         let current = path[i], next = path[i+1];
         let cC = current.replace(/_/g, ' '), nC = next.replace(/_/g, ' ');
-
         if (cC.startsWith("Elevator") && nC.startsWith("Elevator") && cC.split(" ")[1] === nC.split(" ")[1]) {
             let eID = cC.split(" ")[0] + "_" + cC.split(" ")[1];
             let j = i;
@@ -117,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const res = findShortestPath(startSelect.value, endSelect.value);
         output.classList.remove("hidden");
         document.getElementById("path-result").innerHTML = generateDetailedInstructions(res.path);
-        document.getElementById("distance-result").innerText = (currentLang === "am" ? translations.am.total + " " : "Total Distance: ") + formatDistance(res.distance);
+        document.getElementById("distance-result").innerText = (currentLang === "am" ? "ጠቅላላ ርቀት: " : "Total Distance: ") + formatDistance(res.distance);
     });
 
     emBtn.addEventListener("click", () => {
@@ -127,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (best) {
             output.classList.remove("hidden");
             document.getElementById("path-result").innerHTML = generateDetailedInstructions(best.path);
-            document.getElementById("distance-result").innerText = (currentLang === "am" ? translations.am.total + " " : "Total Distance: ") + formatDistance(min);
+            document.getElementById("distance-result").innerText = (currentLang === "am" ? "ጠቅላላ ርቀት: " : "Total Distance: ") + formatDistance(min);
         }
     });
     updateUI();
